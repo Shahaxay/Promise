@@ -35,21 +35,20 @@ function displayPost(){
     console.log(`user last activity time ${user.lastActivity}`);
 }
 
-var promise1=createPost({title:"post1"});
-var promise2=updateLastUserActivityTime();
-
-Promise.all([promise1,promise2]).then(()=>{
+const globalfunc = async ()=>{
+    var promise1=createPost({title:"post1"});
+    var promise2=updateLastUserActivityTime();
+    await Promise.all([promise1,promise2]);
     displayPost();
     var promise3=createPost({title:"post2"});
     var promise4=updateLastUserActivityTime();
-    Promise.all([promise3,promise4]).then(()=>{
-        displayPost();
-        deletePost().then((post)=>{
-            console.log(`After deleting last post:${post.title}`);
-            console.log(posts);
-        });
-    })
-})
+    await Promise.all([promise3,promise4]);
+    displayPost();
+    const deleted=await deletePost();
+    console.log(`After deleting last post:${deleted.title}`);
+    console.log(posts);
+}
+globalfunc();
 
 
 
